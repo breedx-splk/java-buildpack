@@ -42,6 +42,13 @@ module JavaBuildpack
         java_opts.add_system_property('splunk.access.token', token)
       end
 
+      protected
+      # (see JavaBuildpack::Component::VersionedDependencyComponent#supports?)
+      def supports?
+        api_key_defined = @application.environment.key?('SPLUNK_ACCESS_TOKEN') && !@application.environment['SPLUNK_ACCESS_TOKEN'].empty?
+        api_key_defined
+      end
+
     end
   end
 end
