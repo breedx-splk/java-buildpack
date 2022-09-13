@@ -18,4 +18,4 @@
 ---
 version: +
 # TODO: Point to the actual URL after https://github.com/signalfx/splunk-otel-java/pull/895 has been merged
-repository_root: https://raw.githubusercontent.com/breedx-splk/splunk-otel-java/add_buildpack_index/deployments/cloudfoundry/buildpack/
+repository_root: https://raw.githubusercontent.com/breedx-splk/splunk-otel-java/add_buildpack_index/deployments/cloudfoundry/
