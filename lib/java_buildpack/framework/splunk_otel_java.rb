@@ -45,9 +45,13 @@ module JavaBuildpack
       protected
       # (see JavaBuildpack::Component::VersionedDependencyComponent#supports?)
       def supports?
-        api_key_defined = @application.environment.key?('SPLUNK_ACCESS_TOKEN') && !@application.environment['SPLUNK_ACCESS_TOKEN'].empty?
-        api_key_defined
+        # api_key_defined = @application.environment.key?('SPLUNK_ACCESS_TOKEN') && !@application.environment['SPLUNK_ACCESS_TOKEN'].empty?
+        has_user_service = @application.services.one_service? REQUIRED_SERVICE_NAME_FILTER
+        has_user_service
       end
+
+      private
+      REQUIRED_SERVICE_NAME_FILTER = /splunk-o11y/.freeze
 
     end
   end
