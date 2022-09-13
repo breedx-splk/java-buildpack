@@ -38,15 +38,17 @@ module JavaBuildpack
         java_opts = @droplet.java_opts
         java_opts.add_javaagent(@droplet.sandbox + jar_name)
 
-        token = @application.environment['SPLUNK_ACCESS_TOKEN']
-        java_opts.add_system_property('splunk.access.token', token)
+        # token = @application.environment['SPLUNK_ACCESS_TOKEN']
+        # java_opts.add_system_property('splunk.access.token', token)
+        app_name = @application.details['application_name']
+        java_opts.add_system_property('otel.service.name', app_name)
       end
 
       protected
       # (see JavaBuildpack::Component::VersionedDependencyComponent#supports?)
       def supports?
         # api_key_defined = @application.environment.key?('SPLUNK_ACCESS_TOKEN') && !@application.environment['SPLUNK_ACCESS_TOKEN'].empty?
-        has_user_service = @application.services.one_service? REQUIRED_SERVICE_NAME_FILTER
+        has_user_service = @application.services.one_service? REQUIRED_SERVICE_NAME_FILTER, 
         has_user_service
       end
 
