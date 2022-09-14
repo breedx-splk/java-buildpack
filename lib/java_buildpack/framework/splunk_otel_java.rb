@@ -38,9 +38,11 @@ module JavaBuildpack
         java_opts = @droplet.java_opts
         java_opts.add_javaagent(@droplet.sandbox + jar_name)
 
-        token = @application.services.find_service(REQUIRED_SERVICE_NAME_FILTER)
-        java_opts.add_system_property('splunk.access.token', token) if token 
-        
+        o11y_service = @application.services.find_service(REQUIRED_SERVICE_NAME_FILTER)
+        if o11y_service
+          token = o11y_service['SPLUNK_ACCESS_TOKEN']
+          java_opts.add_system_property('splunk.access.token', token)
+
         app_name = @application.details['application_name']
         java_opts.add_system_property('otel.service.name', app_name)
       end
