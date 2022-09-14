@@ -42,7 +42,8 @@ module JavaBuildpack
         if o11y_service
           token = o11y_service['SPLUNK_ACCESS_TOKEN']
           java_opts.add_system_property('splunk.access.token', token)
-
+        end
+        
         app_name = @application.details['application_name']
         java_opts.add_system_property('otel.service.name', app_name)
       end
