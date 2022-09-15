@@ -22,11 +22,7 @@ module JavaBuildpack
   module Framework
 
     # Main class for adding the Splunk OpenTelemetry instrumentation agent
-    class SplunkOtelJava < JavaBuildpack::Component::VersionedDependencyComponent
-
-      def initialize(context)
-        super(context)
-      end
+    class SplunkOtelJavaAgent < JavaBuildpack::Component::VersionedDependencyComponent
 
       # (see JavaBuildpack::Component::BaseComponent#compile)
       def compile
@@ -39,9 +35,9 @@ module JavaBuildpack
         java_opts.add_javaagent(@droplet.sandbox + jar_name)
 
         credentials = @application.services.find_service(REQUIRED_SERVICE_NAME_FILTER)['credentials']
-        if credentials
-          token = credentials['SPLUNK_ACCESS_TOKEN']
-          java_opts.add_system_property('splunk.access.token', token)
+        # Add all otel.* and splunk.* credentials from the service bind as jvm system properties
+        credentials&.each do |key, value|
+          java_opts.add_system_property(key, value) if key.start_with?('splunk.') || key.start_with?('otel.')
         end
 
         app_name = @application.details['application_name']
@@ -49,15 +45,13 @@ module JavaBuildpack
       end
 
       protected
+
       # (see JavaBuildpack::Component::VersionedDependencyComponent#supports?)
       def supports?
-        # api_key_defined = @application.environment.key?('SPLUNK_ACCESS_TOKEN') && !@application.environment['SPLUNK_ACCESS_TOKEN'].empty?
-        has_user_service = @application.services.one_service? REQUIRED_SERVICE_NAME_FILTER
-        has_user_service
+        @application.services.one_service? REQUIRED_SERVICE_NAME_FILTER
       end
 
-      private
-      REQUIRED_SERVICE_NAME_FILTER = /splunk-o11y/.freeze
+      REQUIRED_SERVICE_NAME_FILTER = /^splunk-o11y$/.freeze
 
     end
   end

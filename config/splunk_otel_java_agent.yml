@@ -17,6 +17,5 @@
 # See https://github.com/signalfx/splunk-otel-java for more information
 ---
 version: +
-# TODO: Point to the actual URL after https://github.com/signalfx/splunk-otel-java/pull/895 has been merged
 repository_root: https://raw.githubusercontent.com/signalfx/splunk-otel-java/main/deployments/cloudfoundry/
                  
